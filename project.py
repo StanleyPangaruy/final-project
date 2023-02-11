@@ -45,14 +45,21 @@ G.add_edge("San Narciso","Mulanay", weight=39.1)
 def find_shortest_path(G, start, end):
     return nx.dijkstra_path(G, start, end, weight='weight')
 
+print("---------------------------------------------")
+print("Quezon Province's 3rd and 4th District Travel Guide")
 # Input the start and end towns from the user
 start_city = input("Enter starting town: ")
-end_city = input("Enter ending town: ")
-
+end_city = input("Enter destination: ")
+print("---------------------------------------------")
 # Get the shortest path between the two towns
 shortest_path = find_shortest_path(G, start_city, end_city)
 
-# Print the shortest path
+#total distance
+sum_weights = 0
 print("The shortest path between", start_city, "and", end_city, "is:")
 for i in range(len(shortest_path) - 1):
-    print(shortest_path[i], "to", shortest_path[i + 1], "with a distance of", G[shortest_path[i]][shortest_path[i + 1]]['weight'], "km")
+    weight = G[shortest_path[i]][shortest_path[i + 1]]['weight']
+    sum_weights += weight
+    print(shortest_path[i], "to", shortest_path[i + 1], "with a distance of", weight, "km")
+format_sum_weights = format(sum_weights, '.1f')
+print("The total distance of the shortest path is", format_sum_weights, "km.")
