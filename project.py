@@ -1,4 +1,5 @@
 import networkx as nx
+from fpdf import FPDF
 
 # Create a Graph
 G = nx.Graph()
@@ -52,33 +53,40 @@ def find_shortest_path(G, start, end):
 print("---------------------------------------------")
 print("Quezon Province's 3rd and 4th District Towns Travel Guide")
 
-# Input the start and end towns from the user
-start_city = input("Enter starting town: ")
-while start_city not in towns:
-    print("---------------------------------------------")
-    print("Invalid town. Please enter a valid starting town from the following list:")
-    print(', '.join(towns))
-    print("---------------------------------------------")
-    start_city = input("Enter starting town: ")
+# Input the number of towns in the itinerary from the user
+num_towns = int(input("Enter the number of towns in your itinerary: "))
 
-end_city = input("Enter destination: ")
-while end_city not in towns:
-    print("---------------------------------------------")
-    print("Invalid town. Please enter a valid destination from the following list:")
-    print(', '.join(towns))
-    print("---------------------------------------------")
-    end_city = input("Enter destination: ")
-
+# Input the towns in the itinerary from the user
+itinerary = []
+for i in range(num_towns):
+    town = input("Enter town {}: ".format(i + 1))
+    while town not in towns:
+        print("---------------------------------------------")
+        print("Invalid town. Please enter a valid input from the following list:")
+        print(', '.join(towns))
+        print("---------------------------------------------")
+        town = input("Enter town {}: ".format(i + 1))
+    else:
+        itinerary.append(town)
 print("---------------------------------------------")
-# Get the shortest path between the two towns
-shortest_path = find_shortest_path(G, start_city, end_city)
 
-#total distance
+# Get the shortest path between all the towns in the itinerary
+shortest_paths = []
+for i in range(num_towns - 1):
+    shortest_path = find_shortest_path(G, itinerary[i], itinerary[i + 1])
+    shortest_paths.append(shortest_path)
+
+# Total distance
 sum_weights = 0
-print("The shortest path between", start_city, "and", end_city, "is:")
-for i in range(len(shortest_path) - 1):
-    weight = G[shortest_path[i]][shortest_path[i + 1]]['weight']
-    sum_weights += weight
-    print(shortest_path[i], "to", shortest_path[i + 1], "with a distance of", weight, "km")
+output_str = ""
+print("The shortest path/s for this itinerary is/are: ")
+for shortest_path in shortest_paths:
+    for i in range(len(shortest_path) - 1):
+        weight = G[shortest_path[i]][shortest_path[i + 1]]['weight']
+        sum_weights += weight
+        output_str += shortest_path[i] + " to " + shortest_path[i + 1] + " with a distance of " + str(weight) + " km\n"
+
 format_sum_weights = format(sum_weights, '.1f')
-print("The total distance of the shortest path is", format_sum_weights, "km.")
+output_str += "The total distance of the itinerary is " + format_sum_weights + " km."
+
+print(output_str)
