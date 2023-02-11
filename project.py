@@ -10,46 +10,65 @@ towns = ["Agdangan", "Buenavista", "Catanauan", "General Luna", "Macalelon", "Mu
 for town in towns:
     G.add_node(town)
 
-# Add edges between the towns with a weight representing the distance between the towns
-G.add_edge("Atimonan", "Plaridel", weight=11.8)
-G.add_edge("Atimonan","Unisan", weight=27.4)
-G.add_edge("Atimonan","Padre Burgos", weight=39)
-G.add_edge("Plaridel","Unisan", weight=25.5)
-G.add_edge("Plaridel","Gumaca", weight=11.3)
-G.add_edge("Gumaca","Pitogo", weight=22.6)
-G.add_edge("Gumaca","Quezon", weight=17.1)
-G.add_edge("Gumaca","Alabat", weight=40)
-G.add_edge("Gumaca","Perez", weight=55.6)
-G.add_edge("Gumaca","Lopez", weight=19.8)
-G.add_edge("Gumaca","Unisan", weight=33.4)
-G.add_edge("Lopez","Calauag", weight=10.6)
-G.add_edge("Lopez","Catanauan", weight=41.9)
-G.add_edge("Lopez","Buenavista", weight=33)
-G.add_edge("Calauag","Guinayangan", weight=25.7)
-G.add_edge("Calauag","Tagkawayan", weight=52.8)
-G.add_edge("Agdangan","Unisan", weight=9.3)
-G.add_edge("Padre Burgos","Agdangan", weight=23.5)
-G.add_edge("Unisan","Pitogo", weight=21.2)
-G.add_edge("Pitogo","Macalelon", weight=24.2)
-G.add_edge("Macalelon","General Luna", weight=20.8)
-G.add_edge("General Luna","Catanauan", weight=26)
-G.add_edge("Catanauan","Mulanay", weight=23.7)
-G.add_edge("San Francisco","Mulanay", weight=25.4)
-G.add_edge("San Andres","San Francisco", weight=18.1)
-G.add_edge("San Narciso","San Andres", weight=40.1)
-G.add_edge("Buenavista","San Narciso", weight=27.6)
-G.add_edge("Buenavista","Catanauan", weight=24.9)
-G.add_edge("San Narciso","Mulanay", weight=39.1)
+# Define edges and weights as a list of tuples
+edges_and_weights = [
+    ("Atimonan", "Plaridel", 11.8),
+    ("Atimonan","Unisan", 27.4),
+    ("Atimonan","Padre Burgos", 39),
+    ("Plaridel","Unisan", 25.5),
+    ("Plaridel","Gumaca", 11.3),
+    ("Gumaca","Pitogo", 22.6),
+    ("Gumaca","Quezon", 17.1),
+    ("Gumaca","Alabat", 40),
+    ("Gumaca","Perez", 55.6),
+    ("Gumaca","Lopez", 19.8),
+    ("Gumaca","Unisan", 33.4),
+    ("Lopez","Calauag", 10.6),
+    ("Lopez","Catanauan", 41.9),
+    ("Lopez","Buenavista", 33),
+    ("Calauag","Guinayangan", 25.7),
+    ("Calauag","Tagkawayan", 52.8),
+    ("Agdangan","Unisan", 9.3),
+    ("Padre Burgos","Agdangan", 23.5),
+    ("Unisan","Pitogo", 21.2),
+    ("Pitogo","Macalelon", 24.2),
+    ("Macalelon","General Luna", 20.8),
+    ("General Luna","Catanauan", 26),
+    ("Catanauan","Mulanay", 23.7),
+    ("San Francisco","Mulanay", 25.4),
+    ("San Andres","San Francisco", 18.1),
+    ("San Narciso","San Andres", 40.1),
+    ("Buenavista","San Narciso", 27.6),
+    ("Buenavista","Catanauan", 24.9),
+    ("San Narciso","Mulanay", 39.1)
+]
+# Add edges and weights to the graph
+G.add_weighted_edges_from(edges_and_weights)
 
 # Find the shortest path between two towns using Dijkstra's Algorithm
 def find_shortest_path(G, start, end):
     return nx.dijkstra_path(G, start, end, weight='weight')
 
 print("---------------------------------------------")
-print("Quezon Province's 3rd and 4th District Travel Guide")
+print("Quezon Province's 3rd and 4th District Towns Travel Guide")
+
 # Input the start and end towns from the user
 start_city = input("Enter starting town: ")
+while start_city not in towns:
+    print("---------------------------------------------")
+    print("Invalid town. Please enter a valid starting town from the following list:")
+    print(', '.join(towns))
+    print("---------------------------------------------")
+    start_city = input("Enter starting town: ")
+
 end_city = input("Enter destination: ")
+while end_city not in towns:
+    print("---------------------------------------------")
+    print("Invalid town. Please enter a valid destination from the following list:")
+    print(', '.join(towns))
+    print("---------------------------------------------")
+    end_city = input("Enter destination: ")
+
 print("---------------------------------------------")
 # Get the shortest path between the two towns
 shortest_path = find_shortest_path(G, start_city, end_city)
