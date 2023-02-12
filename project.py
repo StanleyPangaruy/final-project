@@ -79,7 +79,7 @@ for i in range(num_towns - 1):
 # Total distance
 sum_weights = 0
 output_str = ""
-print("The shortest path/s for this itinerary is/are: ")
+print("The shortest paths for this itinerary are: ")
 for shortest_path in shortest_paths:
     for i in range(len(shortest_path) - 1):
         weight = G[shortest_path[i]][shortest_path[i + 1]]['weight']
@@ -90,3 +90,25 @@ format_sum_weights = format(sum_weights, '.1f')
 output_str += "The total distance of the itinerary is " + format_sum_weights + " km."
 
 print(output_str)
+
+# Ask the user if they want to save their itinerary as a file
+save_file = input("Do you want to save your itinerary as a file? (yes/no) ")
+if save_file == "yes":
+    file_format = input("Enter the file format (txt or pdf): ")
+    if file_format == "txt":
+        filename = input("Enter the filename: ")
+        newFileTxt = filename + '.txt'
+        with open(newFileTxt, "w") as f:
+            f.write(output_str)
+        print("Itinerary saved as", newFileTxt)
+    elif file_format == "pdf":
+        filename = input("Enter the filename: ")
+        newFilePdf = filename + '.pdf'
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size = 15)
+        for output in output_str.split("\n"):
+            pdf.cell(200, 10, txt = output,
+                    ln = 1, align = 'C')
+        pdf.output(newFilePdf)
+        print("Itinerary saved as", newFilePdf)
